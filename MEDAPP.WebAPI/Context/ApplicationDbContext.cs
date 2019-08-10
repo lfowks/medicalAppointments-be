@@ -27,12 +27,31 @@ namespace MEDAPP.WebAPI.Context
 
                 entity.HasKey(e => e.Id );
 
+                entity.Property(e => e.PatientId).IsRequired();
+                entity.Property(e => e.AppointmentCategoryId).IsRequired();
                 //entity.Property(e => e.Id).IsRequired().IsConcurrencyToken();
 
-                modelBuilder.Entity<Appointment>()
-                .HasOne(ac => ac.AppointmentCategory)
-                .WithOne(a => a.Appointment)
-                .HasForeignKey<Appointment>(a => a.AppointmentCategoryId);
+                entity
+                .HasOne(ac => ac.AppointmentCategory);
+
+            });
+
+            modelBuilder.Entity<AppointmentCategory>(entity => {
+
+                entity.HasKey(e => e.Id);
+
+                entity
+                 .HasMany(a => a.Appointment).WithOne(ac => ac.AppointmentCategory).HasForeignKey(ac => ac.AppointmentCategoryId);
+
+            });
+
+
+            modelBuilder.Entity<Patient>(entity => {
+
+                entity.HasKey(e => e.Id);
+                
+                entity
+                 .HasMany(a => a.Appointment).WithOne(p => p.Patient).HasForeignKey(p => p.PatientId);
 
             });
         }

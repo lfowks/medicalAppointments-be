@@ -14,5 +14,7 @@ namespace MEDAPP.Models
         public string Email { get; set; }
         public string Adddress { get; set; }
         public string Phone { get; set; }
+
+        public ICollection<Appointment> Appointment { get; set; }
     }
 }

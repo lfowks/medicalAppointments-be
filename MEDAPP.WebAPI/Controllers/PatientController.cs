@@ -25,33 +25,83 @@ namespace MEDAPP.WebAPI.Controllers
         {
 
             var patients = await _svPatient.FindAll<Patient>();
-            //var paginated = await _context.Post.Skip(page * pageSize).Take(pageSize).ToListAsync();
+            //var paginated = await _svPatient.Post.Skip(page * pageSize).Take(pageSize).ToListAsync();
             return patients;
         }
 
         // GET: api/Patient/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Patient>> Get(int id)
         {
-            return "value";
+            var patient = await _svPatient.FindById<Patient>(id);
+            return patient;
         }
 
         // POST: api/Patient
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<Patient> Post([FromForm] Patient patient)
         {
+            try
+            {
+              await _svPatient.CreateAsync<Patient>(patient);
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+
+            //try
+            //{
+            //  await _svPatient.CreateAsync<Patient>(patient);
+
+            //}
+            //catch (Exception e)
+            //{
+            //    return Result.ResultBuilder(patient, true);
+            //}
+
+            //return Result.ResultBuilder(patient, false);
+
+            return patient;
         }
 
         // PUT: api/Patient/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<Patient> Put(int id,[FromForm] Patient patient)
         {
+            try
+            {
+                patient.Id = id;
+                await _svPatient.UpdateAsync<Patient>(patient);
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+
+            return patient;
         }
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<Patient> Delete(int id)
         {
+            var patientDeleted = new Patient();
+
+            try
+            {
+                patientDeleted = await _svPatient.FindById<Patient>(id);
+                await _svPatient.DeleteAsync<Patient>(patientDeleted);
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+
+            return patientDeleted;
         }
     }
 }

@@ -21,6 +21,11 @@ namespace MEDAPP.Services
             return _myRepo.CreateAsync(entity);
         }
 
+        public Task UpdateAsync<T>(Patient entity)
+        {
+            return _myRepo.UpdateAsync(entity);
+        }
+
         public Task DeleteAsync<T>(Patient entity)
         {
            return _myRepo.DeleteAsync(entity);
@@ -31,14 +36,10 @@ namespace MEDAPP.Services
             return _myRepo.FindAll<Patient>();
         }
 
-        public Task<Patient> FindById<T>(long id)
+        public Task<Patient> FindById<T>(int id)
         {
             return _myRepo.FindById<Patient>(id);
         }
 
-        public Task UpdateAsync<T>(Patient entity)
-        {
-            return _myRepo.UpdateAsync<Patient>(entity);
-        }
     }
 }

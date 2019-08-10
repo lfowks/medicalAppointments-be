@@ -4,14 +4,16 @@ using MEDAPP.WebAPI.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MEDAPP.WebAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190810145448_UpdatingModelsRelations")]
+    partial class UpdatingModelsRelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,7 +35,8 @@ namespace MEDAPP.WebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppointmentCategoryId");
+                    b.HasIndex("AppointmentCategoryId")
+                        .IsUnique();
 
                     b.HasIndex("PatientId");
 
@@ -77,8 +80,8 @@ namespace MEDAPP.WebAPI.Migrations
             modelBuilder.Entity("MEDAPP.Models.Appointment", b =>
                 {
                     b.HasOne("MEDAPP.Models.AppointmentCategory", "AppointmentCategory")
-                        .WithMany("Appointment")
-                        .HasForeignKey("AppointmentCategoryId")
+                        .WithOne("Appointment")
+                        .HasForeignKey("MEDAPP.Models.Appointment", "AppointmentCategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("MEDAPP.Models.Patient", "Patient")
