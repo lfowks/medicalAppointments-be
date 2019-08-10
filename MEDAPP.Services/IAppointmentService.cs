@@ -17,7 +17,7 @@ namespace MEDAPP.Services
         Task DeleteAsync<T>(Appointment entity);
 
         bool ValidateCancelationDate(Appointment entity, DateTime dateCancelation);
-        bool ValidateOneAppointmentPatient(Appointment entity, Patient patient);
+        bool ValidateOneAppointmentPatient(Appointment entity, List<Appointment> listAppointmentsPatient);
 
         ResultEntity ResultBuilder(object entity, bool hasError, string succesMessage = "", string errorMessage = "");
 

@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.645
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MEDAPP.WebAPI", "MEDAPP.WebAPI\MEDAPP.WebAPI.csproj", "{F5D2FC2E-EF64-4136-9CAB-C643D26EE7B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MEDAPP.WebAPI", "MEDAPP.WebAPI\MEDAPP.WebAPI.csproj", "{F5D2FC2E-EF64-4136-9CAB-C643D26EE7B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MEDAPP.Repository", "MEDAPP.Repository\MEDAPP.Repository.csproj", "{F9EF4355-BD4D-4549-ACB7-6DE782334681}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MEDAPP.Repository", "MEDAPP.Repository\MEDAPP.Repository.csproj", "{F9EF4355-BD4D-4549-ACB7-6DE782334681}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MEDAPP.Services", "MEDAPP.Services\MEDAPP.Services.csproj", "{76320155-2D38-4F2E-A238-31EFED2740BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MEDAPP.Services", "MEDAPP.Services\MEDAPP.Services.csproj", "{76320155-2D38-4F2E-A238-31EFED2740BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MEDAPP.Models", "MEDAPP.Models\MEDAPP.Models.csproj", "{8210F95A-51B2-474B-A694-5AADC6B29DF8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MEDAPP.Models", "MEDAPP.Models\MEDAPP.Models.csproj", "{8210F95A-51B2-474B-A694-5AADC6B29DF8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MEDAPP.UnitTesting", "MEDAPP.UnitTesting\MEDAPP.UnitTesting.csproj", "{AE979D0C-21A4-48A1-A15B-82221D52B22F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{8210F95A-51B2-474B-A694-5AADC6B29DF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8210F95A-51B2-474B-A694-5AADC6B29DF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8210F95A-51B2-474B-A694-5AADC6B29DF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE979D0C-21A4-48A1-A15B-82221D52B22F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE979D0C-21A4-48A1-A15B-82221D52B22F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE979D0C-21A4-48A1-A15B-82221D52B22F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE979D0C-21A4-48A1-A15B-82221D52B22F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

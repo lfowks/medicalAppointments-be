@@ -55,11 +55,11 @@ namespace MEDAPP.Services
         /// <param name="entity">Appointment Object</param>
         /// <param name="patient">Patient Object</param>
         /// <returns>Result with Success(True) or Success(False) with Errors and Messages</returns>
-        public  bool ValidateOneAppointmentPatient(Appointment entity, Patient patient)
+        public  bool ValidateOneAppointmentPatient(Appointment entity, List<Appointment> listAppointmentsPatient)
         {
-            List<Appointment> listAppointments = FindByCondition<Appointment>(
+            List<Appointment> listAppointments = listAppointmentsPatient.FindAll(
                 x =>
-                    x.PatientId == patient.Id && x.Date.DayOfYear == entity.Date.DayOfYear
+                    x.Date.DayOfYear == entity.Date.DayOfYear
             );
 
             if (listAppointments == null || listAppointments.Count == 0) return true;

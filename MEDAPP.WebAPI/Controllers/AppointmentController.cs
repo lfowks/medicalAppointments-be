@@ -47,7 +47,8 @@ namespace MEDAPP.WebAPI.Controllers
             {
                 Patient patient = await _svPatient.FindById<Patient>(appointment.PatientId);
 
-                bool validAppointment = _svAppointment.ValidateOneAppointmentPatient(appointment, patient);
+                var listAppointmentsPatient = _svAppointment.FindByCondition<Patient>(x => x.PatientId == appointment.PatientId);
+                bool validAppointment = _svAppointment.ValidateOneAppointmentPatient(appointment, listAppointmentsPatient);
 
                 if (!validAppointment)
                     return new Appointment
