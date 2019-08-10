@@ -4,4 +4,9 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MEDAPP.Models\MEDAPP.Models.csproj" />
+    <ProjectReference Include="..\MEDAPP.Repository\MEDAPP.Repository.csproj" />
+  </ItemGroup>
+
 </Project>
