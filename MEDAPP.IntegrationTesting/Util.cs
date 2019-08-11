@@ -47,7 +47,7 @@ namespace MEDAPP.IntegrationTesting
             return new Patient()
             {
                 Name = "Dummy",
-                Adddress = "SJ CR",
+                Address = "SJ CR",
                 Email = "dummy@dummy.com",
                 Phone = "8888-88888"
             };

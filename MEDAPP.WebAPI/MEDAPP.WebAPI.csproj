@@ -4,6 +4,10 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>2</WarningLevel>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Migrations\20190810042307_FirstDBDesign.cs" />
     <Compile Remove="Migrations\20190810042307_FirstDBDesign.Designer.cs" />
@@ -12,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Models\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
@@ -26,6 +31,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.5.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -4,13 +4,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using MEDAPP.Models;
 using MEDAPP.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MEDAPP.WebAPI.Controllers
 {
+
+    
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PatientController : ControllerBase
     {
         private readonly IPatientService _svPatient;
@@ -39,7 +44,7 @@ namespace MEDAPP.WebAPI.Controllers
 
         // POST: api/Patient
         [HttpPost]
-        public async Task<Patient> Post([FromForm] Patient patient)
+        public async Task<Patient> Post([FromBody] Patient patient)
         {
             try
             {
@@ -68,7 +73,7 @@ namespace MEDAPP.WebAPI.Controllers
 
         // PUT: api/Patient/5
         [HttpPut("{id}")]
-        public async Task<Patient> Put(int id,[FromForm] Patient patient)
+        public async Task<Patient> Put(int id,[FromBody] Patient patient)
         {
             try
             {

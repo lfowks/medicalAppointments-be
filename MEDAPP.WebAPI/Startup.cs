@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using MEDAPP.Repository;
 using MEDAPP.Services;
 using MEDAPP.WebAPI.Context;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -14,7 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-
+using Microsoft.IdentityModel.Tokens;
 
 namespace MEDAPP.WebAPI
 {
@@ -26,6 +28,7 @@ namespace MEDAPP.WebAPI
         }
 
         public IConfiguration Configuration { get; }
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -41,6 +44,32 @@ namespace MEDAPP.WebAPI
 
             services.AddScoped<IRepository, Repository<ApplicationDbContext>>();
 
+
+
+            //JWT Auth
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                builder =>
+                {
+                    builder.WithOrigins("http://localhost:5000").AllowAnyHeader()
+                            .AllowAnyMethod();
+                });
+            });
+
+            var key = Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value);
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,7 +84,12 @@ namespace MEDAPP.WebAPI
                 app.UseHsts();
             }
 
+            app.UseCors(MyAllowSpecificOrigins);
+
+            app.UseAuthentication();
+
             app.UseHttpsRedirection();
+
             app.UseMvc();
         }
     }

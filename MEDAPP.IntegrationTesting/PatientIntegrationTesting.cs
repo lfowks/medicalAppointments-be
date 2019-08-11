@@ -154,7 +154,7 @@ namespace MEDAPP.IntegrationTesting
 
             //  Change the patient object
             patient.Name = "Dummy Name Updated";
-            patient.Adddress = "Dummy Address Updated";
+            patient.Address = "Dummy Address Updated";
 
             patient.Appointment = null;
 
@@ -170,7 +170,7 @@ namespace MEDAPP.IntegrationTesting
 
             if (responseBodyUpdated == null) Assert.True(false);
 
-            if(responseBodyUpdated.Name.Equals("Dummy Name Updated") && responseBodyUpdated.Adddress.Equals("Dummy Address Updated"))
+            if(responseBodyUpdated.Name.Equals("Dummy Name Updated") && responseBodyUpdated.Address.Equals("Dummy Address Updated"))
                Assert.True(true);
         }
 

@@ -4,14 +4,16 @@ using MEDAPP.WebAPI.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MEDAPP.WebAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190811044530_CorrectionPatient")]
+    partial class CorrectionPatient
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,7 +63,7 @@ namespace MEDAPP.WebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Adddress");
+                    b.Property<string>("Address");
 
                     b.Property<string>("Email");
 
@@ -72,6 +74,23 @@ namespace MEDAPP.WebAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Patient");
+                });
+
+            modelBuilder.Entity("MEDAPP.Models.Security.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Email");
+
+                    b.Property<string>("Password");
+
+                    b.Property<string>("UserName");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("MEDAPP.Models.Appointment", b =>

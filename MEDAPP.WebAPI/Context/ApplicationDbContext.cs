@@ -1,7 +1,9 @@
 ﻿using MEDAPP.Models;
+using MEDAPP.Models.Security;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MEDAPP.WebAPI.Context
 {
-    public class ApplicationDbContext:DbContext
+    public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -20,9 +22,12 @@ namespace MEDAPP.WebAPI.Context
 
         public virtual DbSet<AppointmentCategory> AppointmentCategory { get; set; }
 
+   
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+           
+
             modelBuilder.Entity<Appointment>(entity => {
 
                 entity.HasKey(e => e.Id );
@@ -54,9 +59,11 @@ namespace MEDAPP.WebAPI.Context
                  .HasMany(a => a.Appointment).WithOne(p => p.Patient).HasForeignKey(p => p.PatientId);
 
             });
+
+
         }
 
-         
-        
+
+
     }
 }
