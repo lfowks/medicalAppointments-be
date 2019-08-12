@@ -76,7 +76,9 @@ namespace MEDAPP.Services
 
         public bool ValidateCancelationDate(Appointment entity, DateTime dateCancelation)
         {
-            if ((entity.Date - dateCancelation.Date).TotalDays >= 1) return true;
+            double totalDays = (entity.Date - dateCancelation.Date).TotalDays;
+
+            if (totalDays >= 1 || totalDays < 0) return true;
 
             return false;
         }
