@@ -27,6 +27,7 @@ namespace MEDAPP.WebAPI.Controllers
         public async Task<ActionResult<IEnumerable<Appointment>>> Get()
         {
             var appointments = await _svAppointment.FindAll<Appointment>();
+           
             //var paginated = await _svAppointment.Post.Skip(page * pageSize).Take(pageSize).ToListAsync();
             return appointments;
         }
@@ -36,16 +37,47 @@ namespace MEDAPP.WebAPI.Controllers
         public async Task<ActionResult<Appointment>> Get(int id)
         {
             var appointment = await _svAppointment.FindById<Appointment>(id);
+            var listAppointmentsCat = await _svAppointment.FindAllCategories<AppointmentCategory>();
+
+            appointment.AppointmentCategoryName = listAppointmentsCat.Find(y => y.Id == appointment.AppointmentCategoryId).Name;
+
             return appointment;
+        }
+
+        // GET: api/Appointment/Patient
+        [HttpGet("patient-appointment/{id}")]
+        public async Task<IEnumerable<Appointment>> GetByPatient(int id)
+        {
+            var listAppointmentsPatient = _svAppointment.FindByCondition<Patient>(x => x.PatientId == id);
+
+            var listAppointmentsCat = await _svAppointment.FindAllCategories<AppointmentCategory>();
+
+            listAppointmentsPatient.ForEach(x => x.AppointmentCategoryName = listAppointmentsCat.Find(y => y.Id == x.AppointmentCategoryId).Name);
+
+            return listAppointmentsPatient;
+        }
+
+
+        // GET: api/Appointment/Patient
+        [HttpGet("categories")]
+        public async Task<IEnumerable<AppointmentCategory>> GetAllCategories(int id)
+        {
+            var listAppointmentsCat = await _svAppointment.FindAllCategories<AppointmentCategory>();
+            return listAppointmentsCat;
         }
 
         // POST: api/Appointment
         [HttpPost]
-        public async Task<Appointment> Post([FromForm] Appointment appointment)
+        public async Task<Appointment> Post([FromBody] Appointment appointment)
         {
             try
             {
                 Patient patient = await _svPatient.FindById<Patient>(appointment.PatientId);
+
+                var dateWeb = appointment.Date;
+                DateTime dateTime = new DateTime(dateWeb.Year, dateWeb.Month, dateWeb.Day-1, int.Parse(appointment.Hours), int.Parse(appointment.Minutes), 0);
+
+                appointment.Date = dateTime;
 
                 var listAppointmentsPatient = _svAppointment.FindByCondition<Patient>(x => x.PatientId == appointment.PatientId);
                 bool validAppointment = _svAppointment.ValidateOneAppointmentPatient(appointment, listAppointmentsPatient);
@@ -72,11 +104,17 @@ namespace MEDAPP.WebAPI.Controllers
 
         // PUT: api/Appointment/5
         [HttpPut("{id}")]
-        public async Task<Appointment> Put(int id, [FromForm] Appointment appointment)
+        public async Task<Appointment> Put(int id, [FromBody] Appointment appointment)
         {
             try
             {
                 appointment.Id = id;
+
+                var dateWeb=appointment.Date;
+                DateTime dateTime = new DateTime(dateWeb.Year, dateWeb.Month, dateWeb.Day-1, int.Parse(appointment.Hours), int.Parse(appointment.Minutes),0);
+
+                appointment.Date = dateTime;
+
                 await _svAppointment.UpdateAsync<Appointment>(appointment);
             }
             catch (Exception e)
@@ -108,7 +146,7 @@ namespace MEDAPP.WebAPI.Controllers
                         PatientId = appointmentDeleted.PatientId,
                         Date = appointmentDeleted.Date,
                         AppointmentCategoryId = appointmentDeleted.AppointmentCategoryId,
-                        Result = _svAppointment.ResultBuilder(appointmentDeleted, true, "", "You can not cancel your appointment in the same day you have it.")
+                        Result = _svAppointment.ResultBuilder(appointmentDeleted, true, "", "You can not cancel the appointment the same day is booked.")
                     };
 
 

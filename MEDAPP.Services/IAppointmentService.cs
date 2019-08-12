@@ -9,6 +9,8 @@ namespace MEDAPP.Services
     public interface IAppointmentService
     {
         Task<List<Appointment>> FindAll<T>();
+        Task<List<AppointmentCategory>> FindAllCategories<T>();
+
         Task<Appointment> FindById<T>(int id);
         List<Appointment> FindByCondition<T>(System.Linq.Expressions.Expression<Func<Appointment, bool>> expression);
 

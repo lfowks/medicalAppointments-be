@@ -37,6 +37,12 @@ namespace MEDAPP.Services
             return _myRepo.FindAll<Appointment>();
         }
 
+
+        public Task<List<AppointmentCategory>> FindAllCategories<T>()
+        {
+            return _myRepo.FindAll<AppointmentCategory>();
+        }
+
         public Task<Appointment> FindById<T>(int id)
         {
             return _myRepo.FindById<Appointment>(id);

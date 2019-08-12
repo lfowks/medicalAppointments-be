@@ -84,13 +84,13 @@ namespace MEDAPP.WebAPI
                 app.UseHsts();
             }
 
-            app.UseCors(MyAllowSpecificOrigins);
+            app.UseCors(MyAllowSpecificOrigins);//1
 
-            app.UseAuthentication();
+            app.UseAuthentication();//2
 
-            app.UseHttpsRedirection();
+            app.UseHttpsRedirection();//3
 
-            app.UseMvc();
+            app.UseMvc();//4
         }
     }
 }
