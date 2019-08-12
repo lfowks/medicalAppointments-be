@@ -42,6 +42,18 @@ namespace MEDAPP.WebAPI.Controllers
             return patient;
         }
 
+
+        [HttpGet("search/{filter}")]
+        public async Task<ActionResult<IEnumerable<Patient>>> Search(string filter)
+        {
+            var patients = _svPatient.FindByCondition<Patient>(x=>
+                x.Name.Contains(filter) || x.Email.Contains(filter) || x.Address.Contains(filter) || x.Phone.Contains(filter)
+            );
+            //var paginated = await _svPatient.Post.Skip(page * pageSize).Take(pageSize).ToListAsync();
+            return patients;
+        }
+
+
         // POST: api/Patient
         [HttpPost]
         public async Task<Patient> Post([FromBody] Patient patient)

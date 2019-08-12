@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using MEDAPP.Models;
@@ -39,6 +40,11 @@ namespace MEDAPP.Services
         public Task<Patient> FindById<T>(int id)
         {
             return _myRepo.FindById<Patient>(id);
+        }
+
+        public List<Patient> FindByCondition<T>(Expression<Func<Patient, bool>> expression)
+        {
+            return _myRepo.FindByCondition(expression);
         }
 
     }
