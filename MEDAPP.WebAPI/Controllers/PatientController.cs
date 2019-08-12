@@ -31,7 +31,7 @@ namespace MEDAPP.WebAPI.Controllers
 
             var patients = await _svPatient.FindAll<Patient>();
             //var paginated = await _svPatient.Post.Skip(page * pageSize).Take(pageSize).ToListAsync();
-            return patients;
+            return patients?.OrderByDescending(x=>x.Id).ToList();
         }
 
         // GET: api/Patient/5
@@ -50,7 +50,7 @@ namespace MEDAPP.WebAPI.Controllers
                 x.Name.Contains(filter) || x.Email.Contains(filter) || x.Address.Contains(filter) || x.Phone.Contains(filter)
             );
             //var paginated = await _svPatient.Post.Skip(page * pageSize).Take(pageSize).ToListAsync();
-            return patients;
+            return patients?.OrderByDescending(x => x.Id).ToList();
         }
 
 

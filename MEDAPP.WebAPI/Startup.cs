@@ -54,7 +54,7 @@ namespace MEDAPP.WebAPI
                 options.AddPolicy(MyAllowSpecificOrigins,
                 builder =>
                 {
-                    builder.WithOrigins("http://localhost:5000").AllowAnyHeader()
+                    builder.WithOrigins("http://localhost:4200").AllowAnyHeader()
                             .AllowAnyMethod();
                 });
             });

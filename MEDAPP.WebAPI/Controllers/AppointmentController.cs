@@ -31,7 +31,7 @@ namespace MEDAPP.WebAPI.Controllers
             var appointments = await _svAppointment.FindAll<Appointment>();
 
             //var paginated = await _svAppointment.Post.Skip(page * pageSize).Take(pageSize).ToListAsync();
-            return appointments;
+            return appointments?.OrderByDescending(x => x.Id).ToList();
         }
 
         // GET: api/Appointment/5
@@ -58,7 +58,7 @@ namespace MEDAPP.WebAPI.Controllers
 
             listAppointmentsPatient.ForEach(x => x.AppointmentCategoryName = listAppointmentsCat.Find(y => y.Id == x.AppointmentCategoryId).Name);
 
-            return listAppointmentsPatient;
+            return listAppointmentsPatient?.OrderByDescending(x => x.Id).ToList();
         }
 
 
