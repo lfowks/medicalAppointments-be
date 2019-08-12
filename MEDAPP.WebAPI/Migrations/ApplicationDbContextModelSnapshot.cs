@@ -96,8 +96,8 @@ namespace MEDAPP.WebAPI.Migrations
                     b.ToTable("Role");
 
                     b.HasData(
-                        new { RoleId = 1, Name = "ADMIN" },
-                        new { RoleId = 2, Name = "USER" }
+                        new { RoleId = 1, Description = "ADMIN", Name = "ADMIN" },
+                        new { RoleId = 2, Description = "ADMIN", Name = "USER" }
                     );
                 });
 

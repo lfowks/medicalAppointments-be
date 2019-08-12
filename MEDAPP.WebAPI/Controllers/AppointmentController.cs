@@ -29,7 +29,7 @@ namespace MEDAPP.WebAPI.Controllers
         public async Task<ActionResult<IEnumerable<Appointment>>> Get()
         {
             var appointments = await _svAppointment.FindAll<Appointment>();
-           
+
             //var paginated = await _svAppointment.Post.Skip(page * pageSize).Take(pageSize).ToListAsync();
             return appointments;
         }

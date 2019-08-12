@@ -13,6 +13,10 @@ namespace MEDAPP.Services
         string EncryptPassword(string password, string salt);
         Task<User> CheckUserAndPassword(User entity);
 
+
+        User FindSingleByCondition<T>(System.Linq.Expressions.Expression<Func<User, bool>> expression);
+
+
         Task<List<User>> FindAllUsers<T>();
         Task<List<Role>> FindAllRoles<T>();
 

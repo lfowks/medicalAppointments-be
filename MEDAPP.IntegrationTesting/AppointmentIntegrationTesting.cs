@@ -63,14 +63,20 @@ namespace MEDAPP.IntegrationTesting
             {
                 Email = "testDummy@testDummy.com",
                 Password = "123456",
-                UserName = "testDummy"
+                UserName = "testDummy-" + Guid.NewGuid(),
+                RoleSelected ="1"
 
             };
 
 
 
             var responseRegister = await _testHostFixture.Client.PostAsync(uriRegister, Util.GetStringContent(user));
-           
+            var objUser = await Util.Deserialize<object>(responseRegister);
+
+
+            var idUser = JObject.Parse(objUser.ToString()).SelectToken("user.id");
+
+            user.Id = idUser.ToObject<int>();
 
             var responseLogin= await _testHostFixture.Client.PostAsync(uriLogin, Util.GetStringContent(user));
             

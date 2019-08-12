@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using BCrypt.Net;
@@ -65,6 +66,8 @@ namespace MEDAPP.Services
             return entity;
 
         }
+
+       
 
         public Task CreateRoleAsync<T>(Role entity)
         {
@@ -141,6 +144,11 @@ namespace MEDAPP.Services
         public Task UpdateUserRoleAsync<T>(UserRole entity)
         {
             throw new NotImplementedException();
+        }
+
+        public User FindSingleByCondition<T>(Expression<Func<User, bool>> expression)
+        {
+            return _myRepo.FindSingleByCondition<User>(expression);
         }
     }
 }

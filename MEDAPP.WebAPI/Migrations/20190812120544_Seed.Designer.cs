@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MEDAPP.WebAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190812091033_Seed2")]
-    partial class Seed2
+    [Migration("20190812120544_Seed")]
+    partial class Seed
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -98,8 +98,8 @@ namespace MEDAPP.WebAPI.Migrations
                     b.ToTable("Role");
 
                     b.HasData(
-                        new { RoleId = 1, Name = "ADMIN" },
-                        new { RoleId = 2, Name = "USER" }
+                        new { RoleId = 1, Description = "ADMIN", Name = "ADMIN" },
+                        new { RoleId = 2, Description = "ADMIN", Name = "USER" }
                     );
                 });
 

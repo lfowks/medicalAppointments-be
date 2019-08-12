@@ -40,6 +40,19 @@ namespace MEDAPP.WebAPI.Controllers
         [EnableCors("_myAllowSpecificOrigins")]
         public async Task<ActionResult> Register([FromBody] User model)
         {
+
+            var userExist =_svSecurity.FindSingleByCondition<User>(x => model.UserName.Equals(x.UserName));
+
+
+            if (userExist!=null)
+            {
+                return BadRequest(
+              new
+              {
+                  error="This user name already exists."
+              });
+            }
+
             var passwordHash = _config.GetSection("AppSettings:Hash").Value;
 
             model.PasswordHash = passwordHash;
@@ -57,8 +70,8 @@ namespace MEDAPP.WebAPI.Controllers
                return Ok(
                new
                {
-                   Username = model.UserName
-
+                   Username = model.UserName,
+                   User = model
                });
             }
 

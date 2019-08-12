@@ -56,8 +56,8 @@ namespace MEDAPP.WebAPI.Context
 
             #region Seed
             modelBuilder.Entity<Role>().HasData(
-                new Role { RoleId = 1, Name = "ADMIN" },
-                new Role { RoleId = 2, Name = "USER" }
+                new Role { RoleId = 1, Name = "ADMIN", Description="ADMIN" },
+                new Role { RoleId = 2, Name = "USER" , Description="ADMIN" }
                 );
 
 
