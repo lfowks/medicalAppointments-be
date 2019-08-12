@@ -91,6 +91,7 @@ namespace MEDAPP.WebAPI.Controllers
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<Patient> Delete(int id)
         {
             var patientDeleted = new Patient();

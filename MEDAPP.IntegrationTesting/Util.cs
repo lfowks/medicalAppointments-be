@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
+using System.Text;
 
 namespace MEDAPP.IntegrationTesting
 {
@@ -39,6 +40,11 @@ namespace MEDAPP.IntegrationTesting
         public static FormUrlEncodedContent ObjectToFormUrl(object entity)
         {
             return new FormUrlEncodedContent(JsonConvert.DeserializeObject<Dictionary<string, string>>(JsonConvert.SerializeObject(entity)));
+        }
+
+        public static StringContent GetStringContent(object entity)
+        {
+            return new StringContent(JsonConvert.SerializeObject(entity), Encoding.UTF8, "application/json");
         }
 
 

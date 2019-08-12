@@ -1,4 +1,7 @@
 using MEDAPP.Models;
+using MEDAPP.Models.Security;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -11,6 +14,11 @@ namespace MEDAPP.IntegrationTesting
         
         private string urlApi= "https://localhost:44389/api/patient";
 
+
+        private string uriLogin = "https://localhost:44389/api/auth/login";
+
+        private string uriRegister = "https://localhost:44389/api/auth/register";
+
         public PatientIntegrationTesting()
         {
             _testHostFixture = new TestFixture();
@@ -21,7 +29,7 @@ namespace MEDAPP.IntegrationTesting
         async Task<Patient> CreatePatient()
         {
             Patient patient = Util.PatientDummy();
-            var responsePatient = await _testHostFixture.Client.PostAsync(urlApi, Util.ObjectToFormUrl(patient));
+            var responsePatient = await _testHostFixture.Client.PostAsync(urlApi, Util.GetStringContent(patient));
             patient = await Util.GetPatientFromResponse(responsePatient);
 
             if (patient == null || patient.Id == 0) return null;
@@ -30,12 +38,38 @@ namespace MEDAPP.IntegrationTesting
 
         }
 
+        async Task<String> Login()
+        {
+            User user = new User()
+            {
+                Email = "testDummy@testDummy.com",
+                Password = "123456",
+                UserName = "testDummy"
+
+            };
+
+
+
+            var responseRegister = await _testHostFixture.Client.PostAsync(uriRegister, Util.GetStringContent(user));
+
+
+            var responseLogin = await _testHostFixture.Client.PostAsync(uriLogin, Util.GetStringContent(user));
+
+            var obj = await Util.Deserialize<object>(responseLogin);
+
+            var token = JObject.Parse(obj.ToString()).SelectToken("token");
+
+            _testHostFixture.Client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token.ToObject<string>());
+
+            return token.ToObject<string>();
+        }
         // End Util Creations
 
 
         [Fact]
         public async Task GetById_Success()
         {
+            await Login();
             //Creating a Patient
             Patient patient = await CreatePatient();
             if (patient == null) Assert.True(false);
@@ -59,6 +93,7 @@ namespace MEDAPP.IntegrationTesting
         [Fact]
         public async Task GetById_Fail()
         {
+            await Login();
             //Creating a Patient
             Patient patient = await CreatePatient();
             if (patient == null) Assert.True(false);
@@ -90,7 +125,7 @@ namespace MEDAPP.IntegrationTesting
         [Fact]
         async Task ValidateSuccessPatientCreate()
         {
-
+            await Login();
             //Creating a Patient
 
             Patient patient = await CreatePatient();
@@ -115,9 +150,9 @@ namespace MEDAPP.IntegrationTesting
         [Fact]
         async Task ValidateDeletePatient()
         {
-
+            await Login();
             //Creating a Patient
-                Patient patient = await CreatePatient();
+            Patient patient = await CreatePatient();
                 if (patient == null) Assert.True(false);
             //End Creating a Patient
 
@@ -147,6 +182,7 @@ namespace MEDAPP.IntegrationTesting
         [Fact] 
         async Task ValidateUpdatePatient()
         {
+            await Login();
             //Creating a Patient
             Patient patient = await CreatePatient();
             if (patient == null) Assert.True(false);
@@ -158,7 +194,7 @@ namespace MEDAPP.IntegrationTesting
 
             patient.Appointment = null;
 
-            var response = await _testHostFixture.Client.PutAsync(urlApi+"/"+ patient.Id, Util.ObjectToFormUrl(patient));
+            var response = await _testHostFixture.Client.PutAsync(urlApi+"/"+ patient.Id, Util.GetStringContent(patient));
             Patient responseBody = await Util.GetPatientFromResponse(response);
 
             if (responseBody == null) Assert.True(false);

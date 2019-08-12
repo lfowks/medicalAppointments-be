@@ -111,24 +111,22 @@ namespace MEDAPP.WebAPI.Controllers
 
             User userAuth = await _svSecurity.CheckUserAndPassword(model);
 
-            // var user = await _userManager.FindByNameAsync(model.UserName);
-            // if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
-            //{
-            //var claim = new[]
-            //{
-            // new Claim(JwtRegisteredClaimNames.Sub, user.UserName)
-            // };
             if (userAuth != null)
             {
 
-            //generate token
-            var tokenHandler = new JwtSecurityTokenHandler();
+                List<Claim> listClaims = new List<Claim>();
+
+                listClaims.Add(new Claim(ClaimTypes.Name, userAuth.UserName));
+                userAuth.Roles.ToList().ForEach(
+                 x => listClaims.Add(new Claim(ClaimTypes.Role, x.Name))
+                );
+
+              //generate token
+              var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.ASCII.GetBytes(_config.GetSection("AppSettings:Token").Value);
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
-                    Subject = new ClaimsIdentity(new Claim[]{
-                    new Claim(ClaimTypes.Name, userAuth.UserName)
-                }),
+                    Subject = new ClaimsIdentity(listClaims.ToArray()),
                     Expires = DateTime.Now.AddDays(1),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
                 };

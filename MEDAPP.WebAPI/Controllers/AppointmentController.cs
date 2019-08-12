@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using MEDAPP.Models;
 using MEDAPP.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MEDAPP.WebAPI.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class AppointmentController : ControllerBase
     {
@@ -39,12 +41,14 @@ namespace MEDAPP.WebAPI.Controllers
             var appointment = await _svAppointment.FindById<Appointment>(id);
             var listAppointmentsCat = await _svAppointment.FindAllCategories<AppointmentCategory>();
 
+            if (appointment!=null)
             appointment.AppointmentCategoryName = listAppointmentsCat.Find(y => y.Id == appointment.AppointmentCategoryId).Name;
 
             return appointment;
         }
 
         // GET: api/Appointment/Patient
+        [Authorize(Roles = "ADMIN")]
         [HttpGet("patient-appointment/{id}")]
         public async Task<IEnumerable<Appointment>> GetByPatient(int id)
         {
@@ -75,7 +79,7 @@ namespace MEDAPP.WebAPI.Controllers
                 Patient patient = await _svPatient.FindById<Patient>(appointment.PatientId);
 
                 var dateWeb = appointment.Date;
-                DateTime dateTime = new DateTime(dateWeb.Year, dateWeb.Month, dateWeb.Day-1, int.Parse(appointment.Hours), int.Parse(appointment.Minutes), 0);
+                DateTime dateTime = new DateTime(dateWeb.Year, dateWeb.Month, dateWeb.Day, int.Parse(appointment.Hours), int.Parse(appointment.Minutes), 0);
 
                 appointment.Date = dateTime;
 
@@ -111,7 +115,7 @@ namespace MEDAPP.WebAPI.Controllers
                 appointment.Id = id;
 
                 var dateWeb=appointment.Date;
-                DateTime dateTime = new DateTime(dateWeb.Year, dateWeb.Month, dateWeb.Day-1, int.Parse(appointment.Hours), int.Parse(appointment.Minutes),0);
+                DateTime dateTime = new DateTime(dateWeb.Year, dateWeb.Month, dateWeb.Day, int.Parse(appointment.Hours), int.Parse(appointment.Minutes),0);
 
                 appointment.Date = dateTime;
 
@@ -128,6 +132,7 @@ namespace MEDAPP.WebAPI.Controllers
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<Appointment> Delete(int id)
         {
             var appointmentDeleted = new Appointment();
