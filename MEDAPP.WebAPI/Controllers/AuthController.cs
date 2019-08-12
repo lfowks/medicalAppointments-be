@@ -48,9 +48,8 @@ namespace MEDAPP.WebAPI.Controllers
             await _svSecurity.CreateUserRoleAsync<UserRole>(new UserRole
                     {
                         UserId = model.Id,
-                        RoleId = 1
-
-                    });
+                        RoleId =int.Parse(model.RoleSelected)
+            });
             
 
             if (model.Id!=0)
@@ -63,41 +62,7 @@ namespace MEDAPP.WebAPI.Controllers
                });
             }
 
-           // var user = new ApplicationUser();
-            var result = new IdentityResult();
-
-            try
-            {
-
-            //if (model == null)
-            //{
-                //user = new ApplicationUser
-              //  {
-               //     UserName = "dummyAdmin",
-               //     Email = "dummyAdmin@dummyAdmin.com",
-               //     SecurityStamp = Guid.NewGuid().ToString()
-               // };
-
-                //result = await _userManager.CreateAsync(user, "dummyAdmin");
-            //}
-            
-            if (result.Succeeded)
-            {
-               // await _userManager.AddToRoleAsync(user, "Admin");
-            }
-            return Ok(
-                new
-                {
-                    Username = model.UserName
-
-                });
-
-            }
-            catch (Exception e)
-            {
-
-                throw;
-            }
+             return Unauthorized();
         }
 
 

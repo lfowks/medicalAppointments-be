@@ -22,6 +22,9 @@ namespace MEDAPP.Models.Security
         public string PasswordHash { get; set; }
 
         [NotMapped]
+        public string RoleSelected { get; set; }
+
+        [NotMapped]
         public ICollection<Role> Roles { get; set; }
 
         [JsonIgnore]

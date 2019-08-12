@@ -4,14 +4,16 @@ using MEDAPP.WebAPI.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MEDAPP.WebAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190812090359_Seed1")]
+    partial class Seed1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,13 +55,6 @@ namespace MEDAPP.WebAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AppointmentCategory");
-
-                    b.HasData(
-                        new { Id = 1, Description = "General", Name = "General" },
-                        new { Id = 2, Description = "Dentistry", Name = "Dentistry" },
-                        new { Id = 3, Description = "Pediatrics", Name = "Pediatrics" },
-                        new { Id = 4, Description = "Neurology", Name = "Neurology" }
-                    );
                 });
 
             modelBuilder.Entity("MEDAPP.Models.Patient", b =>

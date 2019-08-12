@@ -54,6 +54,23 @@ namespace MEDAPP.WebAPI.Context
 
             #endregion
 
+            #region Seed
+            modelBuilder.Entity<Role>().HasData(
+                new Role { RoleId = 1, Name = "ADMIN" },
+                new Role { RoleId = 2, Name = "USER" }
+                );
+
+
+            modelBuilder.Entity<AppointmentCategory>().HasData(
+               new AppointmentCategory { Id = 1, Name = "General", Description = "General" },
+               new AppointmentCategory { Id = 2, Name = "Dentistry", Description = "Dentistry" },
+               new AppointmentCategory { Id = 3, Name = "Pediatrics", Description = "Pediatrics" },
+               new AppointmentCategory { Id = 4, Name = "Neurology", Description = "Neurology" }
+               );
+            
+
+            #endregion
+
             modelBuilder.Entity<Appointment>(entity => {
 
                 entity.HasKey(e => e.Id );
