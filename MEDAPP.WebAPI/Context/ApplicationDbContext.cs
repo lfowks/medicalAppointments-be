@@ -19,14 +19,40 @@ namespace MEDAPP.WebAPI.Context
         }
 
         public virtual DbSet<Patient> Patient { get; set; }
-
         public virtual DbSet<AppointmentCategory> AppointmentCategory { get; set; }
+        public virtual DbSet<Appointment> Appointment { get; set; }
 
-   
+        public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<UserRole> UserRole { get; set; }
+        public virtual DbSet<Role> Role { get; set; }
+
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-           
+
+            #region Security Entities
+
+            modelBuilder.Entity<UserRole>(entity =>
+            {
+                entity.HasKey(e => new { e.RoleId, e.UserId });
+                
+            });
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasMany(re => re.UserRole);
+
+            });
+
+            modelBuilder.Entity<Role>(entity =>
+            {
+                entity.HasMany(re => re.UserRole);
+
+            });
+
+            #endregion
 
             modelBuilder.Entity<Appointment>(entity => {
 

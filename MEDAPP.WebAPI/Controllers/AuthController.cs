@@ -5,7 +5,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using MEDAPP.Models.Security;
+using MEDAPP.Services;
 using MEDAPP.WebAPI.Context;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -21,20 +23,47 @@ namespace MEDAPP.WebAPI.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IConfiguration _config;
-        
-        public AuthController(IConfiguration config)//UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager
+
+        private readonly ISecurityService _svSecurity;
+
+
+        public AuthController(IConfiguration config, ISecurityService security)//UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager
         {
             _config = config;
-           /* _userManager = userManager;
-            _signInManager = signInManager;*/
+            _svSecurity = security;
+            /* _userManager = userManager;
+             _signInManager = signInManager;*/
         }
 
         
-       /* [HttpPost("register")]
-        //[EnableCors("_myAllowSpecificOrigins")]
-        public async Task<ActionResult> Register([FromBody] Register model)
+        [HttpPost("register")]
+        [EnableCors("_myAllowSpecificOrigins")]
+        public async Task<ActionResult> Register([FromBody] User model)
         {
-            var user = new ApplicationUser();
+            var passwordHash = _config.GetSection("AppSettings:Hash").Value;
+
+            model.PasswordHash = passwordHash;
+            
+            await _svSecurity.CreateUserAsync<User>(model);
+            await _svSecurity.CreateUserRoleAsync<UserRole>(new UserRole
+                    {
+                        UserId = model.Id,
+                        RoleId = 1
+
+                    });
+            
+
+            if (model.Id!=0)
+            {
+               return Ok(
+               new
+               {
+                   Username = model.UserName
+
+               });
+            }
+
+           // var user = new ApplicationUser();
             var result = new IdentityResult();
 
             try
@@ -42,24 +71,24 @@ namespace MEDAPP.WebAPI.Controllers
 
             //if (model == null)
             //{
-                user = new ApplicationUser
-                {
-                    UserName = "dummyAdmin",
-                    Email = "dummyAdmin@dummyAdmin.com",
-                    SecurityStamp = Guid.NewGuid().ToString()
-                };
+                //user = new ApplicationUser
+              //  {
+               //     UserName = "dummyAdmin",
+               //     Email = "dummyAdmin@dummyAdmin.com",
+               //     SecurityStamp = Guid.NewGuid().ToString()
+               // };
 
-                result = await _userManager.CreateAsync(user, "dummyAdmin");
+                //result = await _userManager.CreateAsync(user, "dummyAdmin");
             //}
             
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, "Admin");
+               // await _userManager.AddToRoleAsync(user, "Admin");
             }
             return Ok(
                 new
                 {
-                    Username = user.UserName
+                    Username = model.UserName
 
                 });
 
@@ -69,29 +98,36 @@ namespace MEDAPP.WebAPI.Controllers
 
                 throw;
             }
-        }*/
+        }
 
 
         [HttpPost("login")]
         [EnableCors("_myAllowSpecificOrigins")]
-        public IActionResult Login([FromBody] Object model)
+        public async Task<IActionResult> Login([FromBody] User model)
         {
+            var passwordHash = _config.GetSection("AppSettings:Hash").Value;
 
-           // var user = await _userManager.FindByNameAsync(model.UserName);
-           // if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
+            model.PasswordHash = passwordHash;
+
+            User userAuth = await _svSecurity.CheckUserAndPassword(model);
+
+            // var user = await _userManager.FindByNameAsync(model.UserName);
+            // if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             //{
-                //var claim = new[]
-                //{
-                   // new Claim(JwtRegisteredClaimNames.Sub, user.UserName)
-               // };
+            //var claim = new[]
+            //{
+            // new Claim(JwtRegisteredClaimNames.Sub, user.UserName)
+            // };
+            if (userAuth != null)
+            {
 
-                //generate token
-                var tokenHandler = new JwtSecurityTokenHandler();
+            //generate token
+            var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.ASCII.GetBytes(_config.GetSection("AppSettings:Token").Value);
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(new Claim[]{
-                    new Claim(ClaimTypes.Name, "Lawrence")
+                    new Claim(ClaimTypes.Name, userAuth.UserName)
                 }),
                     Expires = DateTime.Now.AddDays(1),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
@@ -100,11 +136,17 @@ namespace MEDAPP.WebAPI.Controllers
                 var tokenStr = tokenHandler.CreateToken(tokenDescriptor);
                 var token = tokenHandler.WriteToken(tokenStr);
 
-                return Ok(new { token });
+                return Ok(
+                    new {
+                         token,
+                         User=userAuth
+                    });
+
+            }
             //}
 
-            //return Unauthorized();
-           
+            return Unauthorized();
+
         }
     }
 }

@@ -37,6 +37,7 @@ namespace MEDAPP.WebAPI
 
             services.AddScoped<IPatientService, PatientService>();
             services.AddScoped<IAppointmentService, AppointmentService>();
+            services.AddScoped<ISecurityService, SecurityService>();
 
 
             services.AddDbContext<ApplicationDbContext>(options =>

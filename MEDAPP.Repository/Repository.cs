@@ -56,5 +56,12 @@ namespace MEDAPP.Repository
             return this.dbContext.Set<T>().Where(expression).ToList();
         }
 
+
+        public T FindSingleByCondition<T>(Expression<Func<T, bool>> expression) where T : class
+        {
+            return this.dbContext.Set<T>().Where(expression).FirstOrDefault();
+        }
+
+
     }
 }
